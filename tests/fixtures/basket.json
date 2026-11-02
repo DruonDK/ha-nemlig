@@ -11,5 +11,9 @@
       "Price": 25.9
     }
   ],
-  "TotalProductsPrice": 25.9
+  "NumberOfProducts": 2,
+  "TotalProductsPrice": 25.9,
+  "DeliveryPrice": 27.0,
+  "TotalPrice": 52.9,
+  "MinimumOrderTotal": 500
 }

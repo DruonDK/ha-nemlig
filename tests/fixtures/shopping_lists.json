@@ -1,0 +1,7 @@
+{
+  "ShoppingListOverViewViewModels": [
+    {"Id": 123456, "Name": "Pastaret 🍝", "ProductsCount": 6, "TotalAmount": 187.5},
+    {"Id": 123457, "Name": "Weekend", "ProductsCount": 4, "TotalAmount": 120.0}
+  ],
+  "NumberOfPages": 1
+}

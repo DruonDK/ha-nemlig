@@ -12,8 +12,8 @@ changes.
 
 - [x] Async API client, config flow, reauth
 - [x] Delivery sensors, calendar and `nemlig_delivered` event
-- [ ] Basket sensor and product index
-- [ ] Actions: `nemlig.add_product`, `nemlig.add_shopping_list`, `nemlig.search`
+- [x] Basket sensor and product index
+- [x] Actions: `nemlig.add_product`, `nemlig.add_shopping_list`, `nemlig.search`
 
 ## Installation (HACS)
 

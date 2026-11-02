@@ -14,7 +14,8 @@ from homeassistant.util import dt as dt_util
 
 from .api import NemligAuthError, NemligClient, NemligError
 from .const import DOMAIN, EVENT_DELIVERED
-from .models import DeliveryData, DeliverySpot, Order, OrderStatus
+from .models import Basket, DeliveryData, DeliverySpot, Order, OrderStatus
+from .products import ProductIndex
 
 if TYPE_CHECKING:
     from . import NemligConfigEntry
@@ -26,6 +27,7 @@ DELIVERY_DAY_INTERVAL = timedelta(minutes=5)
 # Start polling often this long before the delivery window opens.
 DELIVERY_LEAD_TIME = timedelta(hours=1)
 ORDER_HISTORY_SIZE = 5
+BASKET_INTERVAL = timedelta(minutes=10)
 
 
 @dataclass
@@ -34,6 +36,39 @@ class NemligData:
 
     client: NemligClient
     delivery: NemligDeliveryCoordinator
+    basket: NemligBasketCoordinator
+    products: ProductIndex
+
+
+class NemligBasketCoordinator(DataUpdateCoordinator[Basket]):
+    """Polls the live basket. Actions that change it push the new basket in directly."""
+
+    config_entry: NemligConfigEntry
+
+    def __init__(
+        self, hass: HomeAssistant, entry: NemligConfigEntry, client: NemligClient
+    ) -> None:
+        """Initialize the coordinator."""
+        super().__init__(
+            hass,
+            _LOGGER,
+            config_entry=entry,
+            name=f"{DOMAIN} basket",
+            update_interval=BASKET_INTERVAL,
+        )
+        self.client = client
+
+    async def _async_update_data(self) -> Basket:
+        try:
+            return Basket.from_api(await self.client.get_basket())
+        except NemligAuthError as err:
+            raise ConfigEntryAuthFailed("nemlig.com rejected the login") from err
+        except NemligError as err:
+            raise UpdateFailed(f"Could not update the basket: {err}") from err
+        except (KeyError, TypeError, ValueError) as err:
+            raise UpdateFailed(
+                f"Unexpected basket data from nemlig.com: {err}"
+            ) from err
 
 
 class NemligDeliveryCoordinator(DataUpdateCoordinator[DeliveryData]):

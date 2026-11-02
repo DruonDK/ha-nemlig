@@ -207,3 +207,67 @@ def parse_local(value: str | None) -> datetime | None:
     if parsed is None:
         return None
     return parsed if parsed.tzinfo else parsed.replace(tzinfo=NEMLIG_TZ)
+
+
+@dataclass(frozen=True, slots=True)
+class BasketLine:
+    """One product line in the basket."""
+
+    product_id: str
+    name: str
+    quantity: int
+    price: float | None
+
+    @classmethod
+    def from_api(cls, data: dict[str, Any]) -> BasketLine:
+        """Parse one entry of the basket's `Lines`."""
+        return cls(
+            product_id=str(data["Id"]),
+            name=str(data.get("Name") or ""),
+            quantity=int(data.get("Quantity") or 0),
+            price=data.get("Price"),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Basket:
+    """The account's live basket, shared with the nemlig.com app."""
+
+    lines: list[BasketLine]
+    products_total: float
+    total: float | None
+    delivery_price: float | None
+    item_count: int
+    minimum_order_total: float | None
+
+    @property
+    def missing_to_minimum(self) -> float | None:
+        """How much more must go in the basket before it can be ordered."""
+        if self.minimum_order_total is None:
+            return None
+        return round(max(0.0, self.minimum_order_total - self.products_total), 2)
+
+    def quantity_of(self, product_id: str) -> int:
+        """The quantity of a product in the basket, 0 when absent."""
+        return next(
+            (line.quantity for line in self.lines if line.product_id == product_id), 0
+        )
+
+    def line(self, product_id: str) -> BasketLine | None:
+        """The basket line for a product, if any."""
+        return next((ln for ln in self.lines if ln.product_id == product_id), None)
+
+    @classmethod
+    def from_api(cls, data: dict[str, Any]) -> Basket:
+        """Parse a GetBasket (or basket-returning write) response."""
+        lines = [BasketLine.from_api(line) for line in data.get("Lines") or []]
+        return cls(
+            lines=lines,
+            products_total=float(data.get("TotalProductsPrice") or 0.0),
+            total=data.get("TotalPrice"),
+            delivery_price=data.get("DeliveryPrice"),
+            item_count=int(
+                data.get("NumberOfProducts") or sum(ln.quantity for ln in lines)
+            ),
+            minimum_order_total=data.get("MinimumOrderTotal"),
+        )

@@ -10,7 +10,8 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from . import NemligConfigEntry
-from .entity import NemligDeliveryEntity
+from .coordinator import NemligDeliveryCoordinator
+from .entity import NemligEntity
 from .models import DeliveryData, Order
 
 PARALLEL_UPDATES = 0
@@ -56,7 +57,7 @@ def _window(
     return order.window_start, order.window_end
 
 
-class NemligCalendar(NemligDeliveryEntity, CalendarEntity):
+class NemligCalendar(NemligEntity[NemligDeliveryCoordinator], CalendarEntity):
     """Recent and upcoming deliveries."""
 
     @property

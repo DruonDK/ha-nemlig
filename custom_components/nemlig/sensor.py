@@ -1,4 +1,4 @@
-"""Delivery sensors for the Nemlig.com integration."""
+"""Delivery and basket sensors for the Nemlig.com integration."""
 
 from __future__ import annotations
 
@@ -18,7 +18,8 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from . import NemligConfigEntry
-from .entity import NemligDeliveryEntity
+from .coordinator import NemligBasketCoordinator, NemligDeliveryCoordinator
+from .entity import NemligEntity
 from .models import DeliveryData, OrderStatus
 
 PARALLEL_UPDATES = 0
@@ -99,14 +100,17 @@ async def async_setup_entry(
     entry: NemligConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up the delivery sensors."""
+    """Set up the delivery and basket sensors."""
     coordinator = entry.runtime_data.delivery
     async_add_entities(
-        NemligSensor(coordinator, description) for description in SENSORS
+        [
+            *(NemligSensor(coordinator, description) for description in SENSORS),
+            NemligBasketSensor(entry.runtime_data.basket, "basket"),
+        ]
     )
 
 
-class NemligSensor(NemligDeliveryEntity, SensorEntity):
+class NemligSensor(NemligEntity[NemligDeliveryCoordinator], SensorEntity):
     """A delivery sensor."""
 
     entity_description: NemligSensorDescription
@@ -127,3 +131,37 @@ class NemligSensor(NemligDeliveryEntity, SensorEntity):
         if self.entity_description.attrs_fn is None:
             return None
         return self.entity_description.attrs_fn(self.coordinator.data)
+
+
+class NemligBasketSensor(NemligEntity[NemligBasketCoordinator], SensorEntity):
+    """The live basket's product total, with its lines as attributes."""
+
+    _attr_device_class = SensorDeviceClass.MONETARY
+    _attr_native_unit_of_measurement = "DKK"
+    _attr_suggested_display_precision = 2
+
+    @property
+    def native_value(self) -> float:
+        """Return the products total."""
+        return self.coordinator.data.products_total
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return the basket details."""
+        basket = self.coordinator.data
+        return {
+            "item_count": basket.item_count,
+            "total_price": basket.total,
+            "delivery_price": basket.delivery_price,
+            "minimum_order_total": basket.minimum_order_total,
+            "missing_to_minimum": basket.missing_to_minimum,
+            "lines": [
+                {
+                    "product_id": line.product_id,
+                    "name": line.name,
+                    "quantity": line.quantity,
+                    "price": line.price,
+                }
+                for line in basket.lines
+            ],
+        }

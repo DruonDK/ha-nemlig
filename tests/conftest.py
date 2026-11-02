@@ -77,6 +77,18 @@ def mock_api() -> Generator[dict[str, AsyncMock]]:
         "async_login": AsyncMock(),
         "get_delivery_spot": AsyncMock(return_value=load_fixture("delivery_spot.json")),
         "get_order_history": AsyncMock(return_value=load_fixture("order_history.json")),
+        "get_order_details": AsyncMock(return_value=load_fixture("order_details.json")),
+        "get_basket": AsyncMock(return_value=load_fixture("basket.json")),
+        "set_basket_quantity": AsyncMock(),
+        "search_products": AsyncMock(
+            return_value=load_fixture("search.json")["Products"]["Products"]
+        ),
+        "get_shopping_lists": AsyncMock(
+            return_value=load_fixture("shopping_lists.json")
+        ),
+        "add_shopping_list_to_basket": AsyncMock(
+            return_value=load_fixture("basket.json")
+        ),
     }
     with patch.multiple("custom_components.nemlig.api.NemligClient", **methods):
         yield methods

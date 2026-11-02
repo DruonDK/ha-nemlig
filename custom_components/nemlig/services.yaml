@@ -1,0 +1,52 @@
+add_product:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: nemlig
+    product_id:
+      example: "701025"
+      selector:
+        text:
+    query:
+      example: "mælk"
+      selector:
+        text:
+    quantity:
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 50
+          mode: box
+
+add_shopping_list:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: nemlig
+    list:
+      required: true
+      example: "Pastaret"
+      selector:
+        text:
+
+search:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: nemlig
+    query:
+      required: true
+      example: "kaffe"
+      selector:
+        text:
+    limit:
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 50
+          mode: box

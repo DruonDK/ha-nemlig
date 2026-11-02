@@ -84,7 +84,109 @@
             "name": "Nemlig-status"
           }
         }
+      },
+      "basket": {
+        "name": "Kurv",
+        "state_attributes": {
+          "item_count": {
+            "name": "Varer"
+          },
+          "total_price": {
+            "name": "Total inkl. levering"
+          },
+          "delivery_price": {
+            "name": "Leveringspris"
+          },
+          "minimum_order_total": {
+            "name": "Minimumsbeløb"
+          },
+          "missing_to_minimum": {
+            "name": "Mangler til minimum"
+          },
+          "lines": {
+            "name": "Linjer"
+          }
+        }
       }
+    }
+  },
+  "services": {
+    "add_product": {
+      "name": "Tilføj vare",
+      "description": "Lægger en vare i nemlig.com-kurven, som deles med nemlig.com-appen. Med en søgetekst vælges den vare, I plejer at købe, og kun når valget er klart.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Konto",
+          "description": "nemlig.com-kontoen. Valgfri med én konto."
+        },
+        "product_id": {
+          "name": "Varenummer",
+          "description": "nemlig.com's varenummer."
+        },
+        "query": {
+          "name": "Søgetekst",
+          "description": "Hvad der skal tilføjes, f.eks. \"mælk\". Matches mod varer, I har købt før."
+        },
+        "quantity": {
+          "name": "Antal",
+          "description": "Hvor mange der lægges oven i det, der allerede er i kurven."
+        }
+      }
+    },
+    "add_shopping_list": {
+      "name": "Tilføj indkøbsliste",
+      "description": "Lægger alle varer fra en gemt nemlig.com-indkøbsliste i kurven.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Konto",
+          "description": "nemlig.com-kontoen. Valgfri med én konto."
+        },
+        "list": {
+          "name": "Liste",
+          "description": "Listens navn (uden forskel på store og små bogstaver) eller ID."
+        }
+      }
+    },
+    "search": {
+      "name": "Søg",
+      "description": "Søger i nemlig.com's sortiment og returnerer varerne.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Konto",
+          "description": "nemlig.com-kontoen. Valgfri med én konto."
+        },
+        "query": {
+          "name": "Søgetekst",
+          "description": "Hvad der skal søges efter."
+        },
+        "limit": {
+          "name": "Antal",
+          "description": "Højst så mange varer."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "no_entry": {
+      "message": "Ingen indlæst Nemlig.com-konto fundet."
+    },
+    "entry_required": {
+      "message": "Der er flere Nemlig.com-konti; vælg én."
+    },
+    "api_error": {
+      "message": "nemlig.com fejlede: {error}"
+    },
+    "product_ambiguous": {
+      "message": "\"{query}\" passer på flere varer, I har købt: {options}. Brug et af varenumrene."
+    },
+    "product_not_found": {
+      "message": "\"{query}\" passer ikke på noget, I har købt før. Søgeresultater: {options}. Brug et af varenumrene."
+    },
+    "product_not_added": {
+      "message": "nemlig.com tilføjede ikke vare {product_id}; den er måske udsolgt."
+    },
+    "list_not_found": {
+      "message": "Ingen indkøbsliste ved navn \"{list}\". Lister: {options}."
     }
   }
 }

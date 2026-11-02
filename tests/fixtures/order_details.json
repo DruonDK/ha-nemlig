@@ -1,0 +1,28 @@
+{
+  "Lines": [
+    {
+      "ProductNumber": "5064654",
+      "ProductName": "Black Coffee Blend Supreme",
+      "Quantity": 2.0,
+      "Description": "400 g / hele bønner / Black Coffee Roasters",
+      "GroupName": "Kaffe, hele bønner",
+      "MainGroupName": "Drikke"
+    },
+    {
+      "ProductNumber": "701025",
+      "ProductName": "Cocio kakaomælk",
+      "Quantity": 1.0,
+      "Description": "0,25 l / Classic",
+      "GroupName": "Kakaomælk",
+      "MainGroupName": "Drikke"
+    },
+    {
+      "ProductNumber": "5000123",
+      "ProductName": "Skummetmælk 0,1% øko.",
+      "Quantity": 2.0,
+      "Description": "1 l / Arla",
+      "GroupName": "Mælk",
+      "MainGroupName": "Mejeri"
+    }
+  ]
+}

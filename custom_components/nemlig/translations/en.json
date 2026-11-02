@@ -84,7 +84,109 @@
             "name": "Nemlig state"
           }
         }
+      },
+      "basket": {
+        "name": "Basket",
+        "state_attributes": {
+          "item_count": {
+            "name": "Items"
+          },
+          "total_price": {
+            "name": "Total incl. delivery"
+          },
+          "delivery_price": {
+            "name": "Delivery price"
+          },
+          "minimum_order_total": {
+            "name": "Minimum order"
+          },
+          "missing_to_minimum": {
+            "name": "Missing to minimum"
+          },
+          "lines": {
+            "name": "Lines"
+          }
+        }
       }
+    }
+  },
+  "services": {
+    "add_product": {
+      "name": "Add product",
+      "description": "Adds a product to the nemlig.com basket, which is shared with the nemlig.com app. With a search text it picks the product you usually buy, and only when the choice is clear.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The nemlig.com account. Optional with one account."
+        },
+        "product_id": {
+          "name": "Product ID",
+          "description": "The nemlig.com product number."
+        },
+        "query": {
+          "name": "Search text",
+          "description": "What to add, e.g. \"mælk\". Matched against products bought before."
+        },
+        "quantity": {
+          "name": "Quantity",
+          "description": "How many to add to what is already in the basket."
+        }
+      }
+    },
+    "add_shopping_list": {
+      "name": "Add shopping list",
+      "description": "Adds every product of a saved nemlig.com shopping list to the basket.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The nemlig.com account. Optional with one account."
+        },
+        "list": {
+          "name": "List",
+          "description": "The list's name (case-insensitive) or ID."
+        }
+      }
+    },
+    "search": {
+      "name": "Search",
+      "description": "Searches the nemlig.com catalogue and returns the products.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The nemlig.com account. Optional with one account."
+        },
+        "query": {
+          "name": "Search text",
+          "description": "What to search for."
+        },
+        "limit": {
+          "name": "Limit",
+          "description": "Maximum number of products."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "no_entry": {
+      "message": "No loaded Nemlig.com account found."
+    },
+    "entry_required": {
+      "message": "Several Nemlig.com accounts are set up; choose one."
+    },
+    "api_error": {
+      "message": "nemlig.com failed: {error}"
+    },
+    "product_ambiguous": {
+      "message": "\"{query}\" matches several products you have bought: {options}. Use one of the product IDs."
+    },
+    "product_not_found": {
+      "message": "\"{query}\" matches nothing you have bought before. Search results: {options}. Use one of the product IDs."
+    },
+    "product_not_added": {
+      "message": "nemlig.com did not add product {product_id}; it may be sold out."
+    },
+    "list_not_found": {
+      "message": "No shopping list called \"{list}\". Lists: {options}."
     }
   }
 }

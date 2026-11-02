@@ -8,7 +8,8 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from . import NemligConfigEntry
-from .entity import NemligDeliveryEntity
+from .coordinator import NemligDeliveryCoordinator
+from .entity import NemligEntity
 
 PARALLEL_UPDATES = 0
 
@@ -24,7 +25,9 @@ async def async_setup_entry(
     )
 
 
-class NemligDeliveryTodaySensor(NemligDeliveryEntity, BinarySensorEntity):
+class NemligDeliveryTodaySensor(
+    NemligEntity[NemligDeliveryCoordinator], BinarySensorEntity
+):
     """On when an order's delivery window is today, also after it has arrived."""
 
     @property

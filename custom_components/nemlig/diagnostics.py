@@ -18,7 +18,8 @@ async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, entry: NemligConfigEntry
 ) -> dict[str, Any]:
     """Return diagnostics; order data holds no names or addresses."""
-    delivery = entry.runtime_data.delivery
+    data = entry.runtime_data
+    delivery, basket = data.delivery, data.basket
     return {
         "entry": async_redact_data(entry.as_dict(), TO_REDACT),
         "delivery": {
@@ -26,4 +27,9 @@ async def async_get_config_entry_diagnostics(
             "update_interval": str(delivery.update_interval),
             "data": asdict(delivery.data) if delivery.data else None,
         },
+        "basket": {
+            "last_update_success": basket.last_update_success,
+            "data": asdict(basket.data) if basket.data else None,
+        },
+        "products": data.products.as_dict(),
     }
