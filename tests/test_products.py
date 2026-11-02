@@ -122,3 +122,22 @@ async def test_refresh_fetches_only_new_orders(hass: HomeAssistant) -> None:
 def test_word_matches(query: str, word: str, matches: bool) -> None:
     """Danish compounds match on their head, not on a modifier."""
     assert _word_matches(query, word) is matches
+
+
+async def test_refresh_includes_orders_known_delivered(hass: HomeAssistant) -> None:
+    """An order DeliverySpot reports delivered is indexed before the history says so."""
+    client = MagicMock()
+    client.get_order_history = AsyncMock(
+        return_value=load_fixture("order_history.json")
+    )
+    client.get_order_details = AsyncMock(
+        return_value=load_fixture("order_details.json")
+    )
+    index = ProductIndex(hass, "entry", client)
+
+    await index.async_refresh({12345678})
+
+    assert [c.args for c in client.get_order_details.await_args_list] == [
+        (12345678,),
+        (12345600,),
+    ]

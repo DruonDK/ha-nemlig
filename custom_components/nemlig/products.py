@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Collection
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from typing import Any
@@ -85,15 +86,19 @@ class ProductIndex:
             self.updated = dt_util.parse_datetime(stored.get("updated") or "")
             self._rebuild()
 
-    async def async_refresh(self) -> None:
+    async def async_refresh(self, delivered_ids: Collection[int] = ()) -> None:
         """Fetch line items for newly delivered orders and drop the oldest.
 
-        Only orders not yet indexed are fetched, so a refresh after a delivery costs two
-        requests. Raises NemligError when nemlig.com fails.
+        `delivered_ids` are orders known to be delivered that the order history may still
+        list as status 2, which it does for hours after the drop-off. Only orders not yet
+        indexed are fetched, so a refresh after a delivery costs two requests. Raises
+        NemligError when nemlig.com fails.
         """
         history = await self._client.get_order_history(take=ORDERS_TO_INDEX + 5)
         orders = [Order.from_api(o) for o in (history or {}).get("Orders") or []]
-        delivered = [o for o in orders if o.delivered][:ORDERS_TO_INDEX]
+        delivered = [o for o in orders if o.delivered or o.id in delivered_ids][
+            :ORDERS_TO_INDEX
+        ]
 
         kept: dict[str, dict[str, Any]] = {}
         for order in delivered:
