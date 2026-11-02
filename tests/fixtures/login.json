@@ -1,0 +1,11 @@
+{
+  "RedirectUrl": "/",
+  "MergeSuccessful": true,
+  "ZipCodeDiffers": false,
+  "TimeslotUtc": "2026110209-300-900",
+  "DeliveryZoneId": 1,
+  "IsExternalLogin": false,
+  "IsFirstLogin": false,
+  "SaveExistingBasket": false,
+  "RemovedMealBoxes": []
+}

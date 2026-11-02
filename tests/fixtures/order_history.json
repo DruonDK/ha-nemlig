@@ -1,0 +1,29 @@
+{
+  "Orders": [
+    {
+      "Id": 12345678,
+      "OrderNumber": "2026-12345678",
+      "Status": 2,
+      "Total": 604.48,
+      "SubTotal": 574.48,
+      "OrderDate": "02/11-2026 kl. 09-14",
+      "DeliveryTime": {"Start": "2026-11-02T09:00:00", "End": "2026-11-02T14:00:00"},
+      "IsEditable": false,
+      "CanRepeat": null,
+      "IsMealBox": null
+    },
+    {
+      "Id": 12345600,
+      "OrderNumber": "2026-12345600",
+      "Status": 3,
+      "Total": 802.6,
+      "SubTotal": 773.6,
+      "OrderDate": "18/10-2026 kl. 16-20",
+      "DeliveryTime": {"Start": "2026-10-18T16:00:00", "End": "2026-10-18T20:00:00"},
+      "IsEditable": false,
+      "CanRepeat": null,
+      "IsMealBox": null
+    }
+  ],
+  "NumberOfPages": 1
+}

@@ -1,0 +1,11 @@
+{
+  "Id": "12345678",
+  "CustomerName": "Anders And",
+  "OrderNumber": "1050001234",
+  "State": "ReadyForDelivery",
+  "TimeSlot": {"Start": "2026-11-02T08:00:00Z", "End": "2026-11-02T13:00:00Z"},
+  "EditDeadline": "2026-11-01T19:59:00Z",
+  "Progress": 0.0,
+  "DeliveryTime": "2026-11-02T10:41:13Z",
+  "DeliveryInterval": {"Start": "2026-11-02T10:21:13Z", "End": "2026-11-02T11:01:13Z"}
+}

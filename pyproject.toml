@@ -1,0 +1,28 @@
+[project]
+name = "ha-nemlig"
+version = "0.1.0"
+description = "Home Assistant custom integration for nemlig.com"
+requires-python = ">=3.14.2"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest-homeassistant-custom-component==0.13.375",
+    "ruff",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC"]
+# Like HA core: the formatter owns line length, long docstrings/strings are fine.
+ignore = ["E501"]

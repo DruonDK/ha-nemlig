@@ -1,0 +1,29 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Log ind med din nemlig.com-konto.",
+        "data": {
+          "username": "Email",
+          "password": "Adgangskode"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Log ind på nemlig.com igen",
+        "description": "nemlig.com afviser nu adgangskoden for {username}.",
+        "data": {
+          "password": "Adgangskode"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Forkert email eller adgangskode.",
+      "cannot_connect": "Kunne ikke få forbindelse til nemlig.com.",
+      "unknown": "Uventet fejl."
+    },
+    "abort": {
+      "already_configured": "Denne nemlig.com-konto er allerede sat op.",
+      "reauth_successful": "Login opdateret."
+    }
+  }
+}

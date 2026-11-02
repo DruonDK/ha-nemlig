@@ -1,0 +1,15 @@
+{
+  "BasketGuid": "e34fc914-f300-46e3-a980-464b0a8e8fe4",
+  "Id": null,
+  "Lines": [
+    {
+      "Id": "701025",
+      "Name": "Cocio kakaomælk",
+      "Brand": "Cocio",
+      "Quantity": 2,
+      "ItemPrice": 12.95,
+      "Price": 25.9
+    }
+  ],
+  "TotalProductsPrice": 25.9
+}
