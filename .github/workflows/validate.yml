@@ -18,6 +18,3 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # No logo yet: nemlig.com's own logo is theirs to license. Add brand/ assets
-          # before submitting to the HACS default list.
-          ignore: brands
