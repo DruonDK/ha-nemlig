@@ -24,6 +24,9 @@ SPOT_STATES = {
     "ReadyForDelivery": "ready_for_delivery",
     "OngoingDelivery": "out_for_delivery",
 }
+# DeliverySpot says this minutes after the drop-off, while the order history keeps
+# reporting the order as status 2 for longer.
+SPOT_DELIVERED = "CompletedDelivery"
 
 
 class OrderStatus:
@@ -128,10 +131,18 @@ class DeliveryData:
     orders: list[Order] = field(default_factory=list)
     spot: DeliverySpot | None = None
 
+    def delivered(self, order: Order) -> bool:
+        """Whether the order history or DeliverySpot reports the order as delivered."""
+        return order.delivered or (
+            self.spot is not None
+            and self.spot.order_id == order.id
+            and self.spot.state == SPOT_DELIVERED
+        )
+
     @property
     def upcoming(self) -> Order | None:
         """The next order not yet delivered (the API lists newest first)."""
-        pending = [o for o in self.orders if not o.delivered]
+        pending = [o for o in self.orders if not self.delivered(o)]
         return pending[-1] if pending else None
 
     @property

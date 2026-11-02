@@ -89,6 +89,15 @@ def test_status_delivered_today_then_none() -> None:
     assert data.status(NEXT_WEEK) == OrderStatus.NONE
 
 
+def test_status_delivered_from_spot() -> None:
+    """DeliverySpot reports the drop-off before the order history does."""
+    raw = load_fixture("delivery_spot.json")
+    raw["State"] = "CompletedDelivery"
+    data = _data(raw, statuses=(2, 3))
+    assert data.upcoming is None
+    assert data.status(DELIVERY_MORNING) == OrderStatus.DELIVERED
+
+
 def test_spot_for_other_order_is_ignored() -> None:
     """DeliverySpot only counts when it describes the upcoming order."""
     raw = load_fixture("delivery_spot.json")
