@@ -11,7 +11,7 @@ changes.
 ## Status
 
 - [x] Async API client, config flow, reauth
-- [ ] Delivery sensors and calendar
+- [x] Delivery sensors, calendar and `nemlig_delivered` event
 - [ ] Basket sensor and product index
 - [ ] Actions: `nemlig.add_product`, `nemlig.add_shopping_list`, `nemlig.search`
 

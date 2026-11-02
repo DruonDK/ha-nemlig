@@ -25,5 +25,66 @@
       "already_configured": "This nemlig.com account is already configured.",
       "reauth_successful": "Login updated."
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "delivery_today": {
+        "name": "Delivery today"
+      }
+    },
+    "calendar": {
+      "deliveries": {
+        "name": "Deliveries"
+      }
+    },
+    "sensor": {
+      "next_delivery": {
+        "name": "Next delivery",
+        "state_attributes": {
+          "window_end": {
+            "name": "Window end"
+          },
+          "order_number": {
+            "name": "Order number"
+          },
+          "total": {
+            "name": "Total"
+          }
+        }
+      },
+      "edit_deadline": {
+        "name": "Edit deadline"
+      },
+      "delivery_eta": {
+        "name": "Expected arrival",
+        "state_attributes": {
+          "window_start": {
+            "name": "Window start"
+          },
+          "window_end": {
+            "name": "Window end"
+          }
+        }
+      },
+      "delivery_progress": {
+        "name": "Delivery progress"
+      },
+      "order_status": {
+        "name": "Order status",
+        "state": {
+          "none": "No order",
+          "editable": "Editable",
+          "processing": "Processing",
+          "ready_for_delivery": "Ready for delivery",
+          "out_for_delivery": "Out for delivery",
+          "delivered": "Delivered"
+        },
+        "state_attributes": {
+          "nemlig_state": {
+            "name": "Nemlig state"
+          }
+        }
+      }
+    }
   }
 }

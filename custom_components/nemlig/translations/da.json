@@ -25,5 +25,66 @@
       "already_configured": "Denne nemlig.com-konto er allerede sat op.",
       "reauth_successful": "Login opdateret."
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "delivery_today": {
+        "name": "Levering i dag"
+      }
+    },
+    "calendar": {
+      "deliveries": {
+        "name": "Leveringer"
+      }
+    },
+    "sensor": {
+      "next_delivery": {
+        "name": "Næste levering",
+        "state_attributes": {
+          "window_end": {
+            "name": "Vindue slut"
+          },
+          "order_number": {
+            "name": "Ordrenummer"
+          },
+          "total": {
+            "name": "Total"
+          }
+        }
+      },
+      "edit_deadline": {
+        "name": "Rettefrist"
+      },
+      "delivery_eta": {
+        "name": "Forventet ankomst",
+        "state_attributes": {
+          "window_start": {
+            "name": "Vindue start"
+          },
+          "window_end": {
+            "name": "Vindue slut"
+          }
+        }
+      },
+      "delivery_progress": {
+        "name": "Leveringsfremdrift"
+      },
+      "order_status": {
+        "name": "Ordrestatus",
+        "state": {
+          "none": "Ingen ordre",
+          "editable": "Kan rettes",
+          "processing": "Behandles",
+          "ready_for_delivery": "Klar til levering",
+          "out_for_delivery": "Undervejs",
+          "delivered": "Leveret"
+        },
+        "state_attributes": {
+          "nemlig_state": {
+            "name": "Nemlig-status"
+          }
+        }
+      }
+    }
   }
 }

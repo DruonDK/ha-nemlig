@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import json
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Generator
 from pathlib import Path
 from typing import Any
+from unittest.mock import AsyncMock, patch
 
 import pytest
+from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 
@@ -66,3 +68,27 @@ def config_entry() -> MockConfigEntry:
         unique_id=USERNAME,
         data={"username": USERNAME, "password": PASSWORD},
     )
+
+
+@pytest.fixture
+def mock_api() -> Generator[dict[str, AsyncMock]]:
+    """Patch the client's network methods with fixture data."""
+    methods = {
+        "async_login": AsyncMock(),
+        "get_delivery_spot": AsyncMock(return_value=load_fixture("delivery_spot.json")),
+        "get_order_history": AsyncMock(return_value=load_fixture("order_history.json")),
+    }
+    with patch.multiple("custom_components.nemlig.api.NemligClient", **methods):
+        yield methods
+
+
+@pytest.fixture
+async def setup_integration(
+    hass: HomeAssistant, config_entry: MockConfigEntry, mock_api: dict[str, AsyncMock]
+) -> MockConfigEntry:
+    """Set up the integration in Danish time with the fixture delivery."""
+    await hass.config.async_set_time_zone("Europe/Copenhagen")
+    config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    return config_entry

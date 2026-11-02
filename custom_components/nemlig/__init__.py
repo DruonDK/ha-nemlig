@@ -9,10 +9,11 @@ from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import NemligAuthError, NemligClient, NemligError
+from .coordinator import NemligData, NemligDeliveryCoordinator
 
-PLATFORMS: list[Platform] = []
+PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR, Platform.CALENDAR, Platform.SENSOR]
 
-type NemligConfigEntry = ConfigEntry[NemligClient]
+type NemligConfigEntry = ConfigEntry[NemligData]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: NemligConfigEntry) -> bool:
@@ -28,7 +29,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: NemligConfigEntry) -> bo
     except NemligError as err:
         raise ConfigEntryNotReady(f"Could not log in to nemlig.com: {err}") from err
 
-    entry.runtime_data = client
+    delivery = NemligDeliveryCoordinator(hass, entry, client)
+    await delivery.async_config_entry_first_refresh()
+
+    entry.runtime_data = NemligData(client=client, delivery=delivery)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
