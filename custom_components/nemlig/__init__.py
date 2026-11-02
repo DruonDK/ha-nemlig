@@ -56,13 +56,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: NemligConfigEntry) -> bo
         client=client, delivery=delivery, basket=basket, products=products
     )
 
-    async def refresh_products(order_id: int | None = None) -> None:
+    def delivered_ids() -> set[int]:
         # DeliverySpot knows about a delivery hours before the order history does.
-        delivered_ids = {order_id} if order_id else set()
-        if data := delivery.data:
-            delivered_ids |= {o.id for o in data.orders if data.delivered(o)}
+        data = delivery.data
+        return {o.id for o in data.orders if data.delivered(o)} if data else set()
+
+    async def refresh_products(order_id: int | None = None) -> None:
+        ids = delivered_ids() | ({order_id} if order_id else set())
         try:
-            await products.async_refresh(delivered_ids)
+            await products.async_refresh(ids)
         except NemligError as err:
             _LOGGER.warning("Could not update the product index: %s", err)
 
@@ -76,7 +78,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: NemligConfigEntry) -> bo
             )
 
     entry.async_on_unload(hass.bus.async_listen(EVENT_DELIVERED, on_delivered))
-    if products.stale:
+    if products.stale(delivered_ids()):
         entry.async_create_background_task(
             hass, refresh_products(), "nemlig product index"
         )

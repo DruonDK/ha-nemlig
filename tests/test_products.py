@@ -93,7 +93,8 @@ async def test_refresh_fetches_only_new_orders(hass: HomeAssistant) -> None:
     # Only the delivered order (status 3) is indexed, and fetched once.
     client.get_order_details.assert_awaited_once_with(12345600)
     assert set(index.products) == {"5064654", "701025", "5000123"}
-    assert not index.stale
+    assert not index.stale({12345600})
+    assert index.stale({12345678})  # delivered, but not indexed yet
 
     reloaded = ProductIndex(hass, "entry", client)
     await reloaded.async_load()

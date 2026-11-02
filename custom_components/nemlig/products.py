@@ -74,10 +74,13 @@ class ProductIndex:
         self.products: dict[str, IndexedProduct] = {}
         self.updated: datetime | None = None
 
-    @property
-    def stale(self) -> bool:
-        """Whether the index should be rebuilt."""
-        return self.updated is None or dt_util.utcnow() - self.updated > MAX_AGE
+    def stale(self, delivered_ids: Collection[int] = ()) -> bool:
+        """Whether the index is old or lacks one of these delivered orders."""
+        return (
+            self.updated is None
+            or dt_util.utcnow() - self.updated > MAX_AGE
+            or any(str(order_id) not in self._orders for order_id in delivered_ids)
+        )
 
     async def async_load(self) -> None:
         """Load the stored index."""
